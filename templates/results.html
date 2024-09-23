@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchLatestPredictions() {
+                $.ajax({
+                    url: '/latest_predictions',
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.html) {
+                            $('#predictions-table').html(response.html);
+                        } else if (response.error) {
+                            $('#predictions-table').html('<p>No predictions available.</p>');
+                        }
+                    },
+                    error: function() {
+                        $('#predictions-table').html('<p>Error fetching predictions.</p>');
+                    }
+                });
+            }
+
+            // Fetch predictions every 60 seconds
+            setInterval(fetchLatestPredictions, 60000);
+
+            // Initial fetch
+            fetchLatestPredictions();
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Prediction Results</h1>
+        <div id="predictions-table">
+            <!-- Prediction results will be injected here -->
+        </div>
+    </div>
+</body>
+</html>
